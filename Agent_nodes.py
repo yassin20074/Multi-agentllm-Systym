@@ -54,6 +54,18 @@ def researcher_node(state: GraphState) -> GraphState:
     state["research_notes"] = notes
     return state
 
+def finalizer(question: str, plan: dict, notes: list, draft: str, critique: dict):
+    return llm.invoke([
+        SystemMessage(content=FINALIZER_SYSTEM),
+        HumanMessage(content=f"""
+Question: {question}
+Plan: {plan}
+Notes: {notes}
+Draft: {draft}
+Critique: {critique}
+""")
+    ]).content
+
 def writer_node(state: GraphState) -> GraphState:
     resp = llm.invoke([
         SystemMessage(content=WRITER_SYSTEM),
